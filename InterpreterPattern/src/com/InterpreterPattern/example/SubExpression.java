@@ -2,14 +2,18 @@ package com.InterpreterPattern.example;
 
 //减运算表达式
 public class SubExpression extends NumericExpression {
-    NumericItem NItem = new NumericItem();
+    NumericItem NItem = new NumericItem();//项
     @Override
     public Integer interpret(Context context) {
-        if (context.getExpString().length()==0) return null;
+        if (context.getExpString().length()==0)
+            return null;
+
         Integer iVal;
         iVal=NItem.interpret(context);
-        if (iVal==null) return null;
-        context.setResultValue(context.getResultValue()-iVal);
+        if (iVal==null)
+            return null;
+        context.setResultValue(context.getResultValue() - iVal);
+
         return context.getResultValue();
     }
 }
