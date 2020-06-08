@@ -1,10 +1,12 @@
 package com.finalWorks.secondQuestion;
 
+//计数结果存储类
 public class CountDto {
+    //单词
     private String word;
-
+    //段号
     private Integer part;
-
+    //段偏移
     private Integer location;
 
     public String getWord() {

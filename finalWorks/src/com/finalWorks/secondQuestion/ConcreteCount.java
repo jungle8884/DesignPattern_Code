@@ -19,24 +19,25 @@ public class ConcreteCount extends CountTemplate {
     protected Map<String, List<CountDto>> doCount(char[] charArray) {
         Map<String, List<CountDto>> cache = new HashMap<>(1024);
         StringBuilder word = new StringBuilder();
-        int part = 1;
-        int location = 0;
-        int split = 0;
+        int part = 1;//段号
+        int location = 0;//在段中的偏移量
+        int split = 0;//统计多少个'\n'分隔符
         for (int i = 0; i < charArray.length; i++) {
             char c = charArray[i];
             if (c == '\n') {
                 split++;
-            } else if (split > 2) {
+            } else if (split > 2) {//超过2个分隔符就算下一段了
                 ++part;
                 location = 0;
                 split = 0;
             }
+            //一个字符一个字符地进行判断
             ++location;
             if (fit(String.valueOf(c))) {
                 word.append(c);
             } else if (String.valueOf(word) != null) {
                 String wordStr = String.valueOf(word);
-                List<CountDto> list = cache.get(wordStr);
+                List<CountDto> list = cache.get(wordStr);//获得相同的单词列表
                 if (list == null) {
                     list = new ArrayList<>();
                 }
@@ -55,17 +56,18 @@ public class ConcreteCount extends CountTemplate {
         for (Map.Entry<String, List<CountDto>> entry : result.entrySet()) {
             List<CountDto> list = entry.getValue();
             if (!entry.getKey().equals("") && list.size() > super.getP()) {
-                list.forEach(c->content.append(String.format("单词: %s, 频次:%s, 段落: %s, 段偏移: %s\n", c.getWord(),
+                list.forEach(c->content.append(String.format("单词: %s, 词频:%s, 段号: %s, 段偏移: %s\n", c.getWord(),
                         list.size(), c.getPart(), c.getLocation())));
             }
         }
         try {
-            Files.write(Paths.get(printPath), content.toString().getBytes());
+            Files.write(Paths.get(printPath), content.toString().getBytes());//写入到输出文件
         } catch (IOException e) {
             System.err.println(e);
         }
     }
 
+    //正则匹配单词
     public static boolean fit(String str) {
         return Pattern.matches("[\u4e00-\u9fa5｜a-z|A-Z]", str);
     }
